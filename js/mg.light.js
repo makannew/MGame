@@ -1,55 +1,59 @@
 
-export function newLight(mainComposite , lightName){
-    // defaults
-    mainComposite.lights[lightName]={};
-    let thisLight = mainComposite.lights[lightName];
-    thisLight.color = 0xffffff;
-    thisLight.intensity = .5;
-    thisLight.visible = true;
-    thisLight.position = new THREE.Vector3(0,0,0);
-    thisLight.targetPosition = new THREE.Vector3(0,0,0);
-    thisLight.castShadow = true ;
-    thisLight.shadowMapDarkness = 1;
-    thisLight.shadowMapSizeWidth = 2048;  
-    thisLight.shadowMapSizeHeight = 2048; 
-    thisLight.shadowCameraNear = 0.5;      
-    thisLight.shadowCameraFar = 2048;   
-    thisLight.skyColor = 0xffffbb;  
-    thisLight.groundColor = 0x080820;
-    thisLight.distance = 0;
-    thisLight.width = 350;
-    thisLight.height = 200;
+export function addLight(mainComposite , newLight){
+  newLight.loadedObjects = mainComposite.loadedObjects.getProxyLessObject;
+  newLight.addFunction(addToLoadedObjects);
+  newLight.mainComposite = mainComposite;
 
-    thisLight.addFunction(light);
-    thisLight.addFunction(needsUpdate);
-    thisLight.addFunction(setIntensity);
-    thisLight.addFunction(setColor);
-    thisLight.addFunction(setGeneralProperties);
-    thisLight.addFunction(setPosition);
+    newLight.color = 0xffffff;
+    newLight.intensity = .5;
+    newLight.visible = true;
+    newLight.position = new THREE.Vector3(0,0,0);
+    newLight.targetPosition = new THREE.Vector3(0,0,0);
+    newLight.castShadow = false ;
+    newLight.shadowMapDarkness = 1;
+    newLight.shadowMapSizeWidth = 2048*2;  
+    newLight.shadowMapSizeHeight = 2048*2; 
+    newLight.shadowCameraNear = 0.5;      
+    newLight.shadowCameraFar = 2048*2;   
+    newLight.skyColor = 0xffffbb;  
+    newLight.groundColor = 0x080820;
+    newLight.distance = 0;
+    newLight.width = 350;
+    newLight.height = 200;
 
-    mainComposite.addLink(mainComposite.three , thisLight.three);
+    newLight.addFunction(light);
+    newLight.addFunction(needsUpdate);
+    newLight.addFunction(setIntensity);
+    newLight.addFunction(setColor);
+    newLight.addFunction(setGeneralProperties);
+    newLight.addFunction(setPosition);
 
-
+    mainComposite.addLink(mainComposite.three , newLight.three);
 }
 
-const setIntensity = function({light , intensity}){
+function addToLoadedObjects({light}){
+  if (addToLoadedObjects) return true;
+  mainComposite.loadedObjects.push(light);
+  return true;
+}
+
+function setIntensity ({light , intensity}){
   light.intensity = intensity;
   return true;
 }
 
-const setColor = function({light , color}){
+function setColor ({light , color}){
   light.color = new THREE.Color(color);
   return true;
 }
 
-const setPosition = function({light , position}){
+function setPosition ({light , position}){
   light.position.x = position.x;
   light.position.y = position.y;
   light.position.z = position.z;
 }
 
-
-const setGeneralProperties = function({light , targetPosition , castShadow , shadowMapDarkness , 
+function setGeneralProperties ({light , targetPosition , castShadow , shadowMapDarkness , 
   shadowMapSizeWidth , shadowMapSizeHeight , shadowCameraNear , shadowCameraFar , skyColor , groundColor , distance , width , height}){
     if(lightType == "spot" || lightType == "directional" || lightType == "point"){
       light.castShadow = castShadow ;
@@ -85,9 +89,7 @@ const setGeneralProperties = function({light , targetPosition , castShadow , sha
     return true;
 }
 
-
-
-const light = function({lightType}){
+function light ({lightType}){
   let result;
   switch(lightType){
     case "ambient":
@@ -117,7 +119,7 @@ const light = function({lightType}){
   return result;
 }
 
-const needsUpdate = function({light , visible }){
+function needsUpdate ({light , visible }){
     if (visible && needsUpdate!=light){
       three.scene.add(light);
     }
