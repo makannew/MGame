@@ -1,3 +1,21 @@
-# MGame
-In this repositry i am developing a simple game engine. My goal is finding best structure by trying different programming techniques.
-MGame is using THREE.js as 3D graphic and CANNON.js as physic engine.
+MGame
+===========
+MGame is a basic javascript game engine that I have created as a practice. it is based on [THREE.js](https://threejs.org) (3D graphic library) and [CANNON.js](https://schteppe.github.io/cannon.js/) (physic library).
+
+## Credits
+
+This repo is compiled by [Makan Edrisi](https://github.com/makannew)
+
+# How to use
+    * Make simple html file. Load your js file as a module.
+    ```
+    <body>
+    <script type = "module" src = "example.js"></script>
+    </body>
+    ```
+    * Import MGame and declear your game object
+    ```
+    import { MGame } from '../js/mg.js';
+    const myGame = MGame();
+    ```
+
