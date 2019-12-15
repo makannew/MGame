@@ -7,14 +7,12 @@ MGame is a basic javascript game engine that I have created as a practice. it is
 This repo is compiled by [Makan Edrisi](https://github.com/makannew)
 
 # How to use
-    * Make simple html file. Load your js file as a module.
-    ```
-    <body>
+    1. Make simple html file. Load your js file as a module.
+    ```html
     <script type = "module" src = "example.js"></script>
-    </body>
     ```
-    * Import MGame and declear your game object
-    ```
+    2. Import MGame and declear your game object in your js file.
+    ```javascript
     import { MGame } from '../js/mg.js';
     const myGame = MGame();
     ```
